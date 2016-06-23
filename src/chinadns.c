@@ -806,8 +806,13 @@ static int should_filter_query(ns_msg msg, struct in_addr dns_addr) {
           return 1;
         }
       }
-    } else if (type == ns_t_aaaa || type == ns_t_ptr) {
-      // if we've got an IPv6 result or a PTR result, pass
+    } else if (type == ns_t_aaaa) {
+      if (dns_is_chn) {
+        // filter DNS result from chn dns if dns is inside chn
+        return 1;
+      }
+    } else if (type == type == ns_t_ptr) {
+      // if we've got a PTR result, pass
       return 0;
     }
   }
@@ -914,5 +919,3 @@ Forward DNS requests.\n\
 \n\
 Online help: <https://github.com/clowwindy/ChinaDNS>\n");
 }
-
-
